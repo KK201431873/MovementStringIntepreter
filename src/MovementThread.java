@@ -21,8 +21,12 @@ public class MovementThread implements Runnable {
 		if (type.isDriveType) {
 			System.out.print(">>> " + "Drive " + movement.INCHES_STRAFE * type.SGN_strafe + "in x "
 					+ movement.INCHES_FORWARD * type.SGN_forward + "in ");
-			if (movement.ignoreVelocity)
-				System.out.print(" (ignoring end velocity)");
+			if (movement.ignoreStartVelocity && movement.ignoreEndVelocity)
+				System.out.print(" (ignoring START and END velocity)");
+			else if (movement.ignoreStartVelocity)
+				System.out.print(" (ignoring START velocity)");
+			else if (movement.ignoreEndVelocity)
+				System.out.print(" (ignoring END velocity)");
 		}
 
 		// TURN CASES

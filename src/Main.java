@@ -45,6 +45,10 @@ public class Main {
 			                 .backward(15)
 			                 .forward(5)
 			                 .lowerArm(10, true)
+				.forward(10, false, true)
+				.forwardRight(10, 5, false, true)
+				.raiseArm(90, true)
+				.forward(10)
 			""";
 
 	public static String s_arr = """
@@ -127,6 +131,15 @@ public class Main {
 //		MovementSequence cursed = new MovementSequenceBuilder().append(pavementJogger).build();
 //
 //		drive.followMovementSequence(cursed, "AAHHHH");
+
+		MovementSequence test = new MovementSequenceBuilder()
+				.forward(10, false, true)
+				.forwardRight(10, 5, false, true)
+				.raiseArm(90, true)
+				.forward(10)
+				.build();
+
+		drive.followMovementSequence(test, "TEST");
 
 	}
 

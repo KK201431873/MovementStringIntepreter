@@ -17,6 +17,10 @@ public class MovementSequenceBuilder {
 		return new MovementSequence(movements);
 	}
 
+	public ArrayDeque<Movement> getMovements() {
+		return movements;
+	}
+
 	/**
 	 * Sets true the linkedToNext boolean of the last Movement in this
 	 * MovementSequenceBuilder.
@@ -26,11 +30,19 @@ public class MovementSequenceBuilder {
 	}
 
 	/**
-	 * Sets true the ignoreVelocity boolean of the last Movement in this
+	 * Sets true the ignoreEndVelocity boolean of the last Movement in this
 	 * MovementSequenceBuilder.
 	 */
-	public void ignoreLastMovementVelocity() {
-		movements.getLast().ignoreDriveVelocity();
+	public void setLastIgnoredEndVelocity() {
+		movements.getLast().setIgnoredEndVelocity();
+	}
+
+	/**
+	 * Sets true the ignoreStartVelocity boolean of the last Movement in this
+	 * MovementSequenceBuilder.
+	 */
+	public void setLastIgnoredStartVelocity() {
+		movements.getLast().setIgnoredStartVelocity();
 	}
 
 	/**
@@ -86,7 +98,18 @@ public class MovementSequenceBuilder {
 	 * @param inches How far the robot should move in inches.
 	 */
 	public MovementSequenceBuilder forward(double inches) {
+		// ignore this start velocity if previous end was ignored
+		boolean ignoreStartVelocity = !movements.isEmpty() && movements.getLast().ignoreEndVelocity;
+		// ignore this end velocity if linked to an ignored end velocity
+		boolean ignoreEndVelocity = ignoreStartVelocity && movements.getLast().linkedToNext;
+
 		movements.add(new Movement(Movement.MovementType.FORWARD, inches, 0, 0, 0, 0, 0));
+
+		if (ignoreStartVelocity)
+			setLastIgnoredStartVelocity();
+		if (ignoreEndVelocity) 
+			setLastIgnoredEndVelocity();
+
 		return this;
 	}
 
@@ -96,7 +119,18 @@ public class MovementSequenceBuilder {
 	 * @param inches How far the robot should move in inches.
 	 */
 	public MovementSequenceBuilder backward(double inches) {
+		// ignore this start velocity if previous end was ignored
+		boolean ignoreStartVelocity = !movements.isEmpty() && movements.getLast().ignoreEndVelocity;
+		// ignore this end velocity if linked to an ignored end velocity
+		boolean ignoreEndVelocity = ignoreStartVelocity && movements.getLast().linkedToNext;
+
 		movements.add(new Movement(Movement.MovementType.BACKWARD, inches, 0, 0, 0, 0, 0));
+
+		if (ignoreStartVelocity)
+			setLastIgnoredStartVelocity();
+		if (ignoreEndVelocity) 
+			setLastIgnoredEndVelocity();
+
 		return this;
 	}
 
@@ -106,7 +140,18 @@ public class MovementSequenceBuilder {
 	 * @param inches How far the robot should strafe in inches.
 	 */
 	public MovementSequenceBuilder left(double inches) {
+		// ignore this start velocity if previous end was ignored
+		boolean ignoreStartVelocity = !movements.isEmpty() && movements.getLast().ignoreEndVelocity;
+		// ignore this end velocity if linked to an ignored end velocity
+		boolean ignoreEndVelocity = ignoreStartVelocity && movements.getLast().linkedToNext;
+
 		movements.add(new Movement(Movement.MovementType.STRAFE_LEFT, 0, inches, 0, 0, 0, 0));
+
+		if (ignoreStartVelocity)
+			setLastIgnoredStartVelocity();
+		if (ignoreEndVelocity) 
+			setLastIgnoredEndVelocity();
+
 		return this;
 	}
 
@@ -116,7 +161,18 @@ public class MovementSequenceBuilder {
 	 * @param inches How far the robot should strafe in inches.
 	 */
 	public MovementSequenceBuilder right(double inches) {
+		// ignore this start velocity if previous end was ignored
+		boolean ignoreStartVelocity = !movements.isEmpty() && movements.getLast().ignoreEndVelocity;
+		// ignore this end velocity if linked to an ignored end velocity
+		boolean ignoreEndVelocity = ignoreStartVelocity && movements.getLast().linkedToNext;
+
 		movements.add(new Movement(Movement.MovementType.STRAFE_RIGHT, 0, inches, 0, 0, 0, 0));
+
+		if (ignoreStartVelocity)
+			setLastIgnoredStartVelocity();
+		if (ignoreEndVelocity) 
+			setLastIgnoredEndVelocity();
+
 		return this;
 	}
 
@@ -147,7 +203,18 @@ public class MovementSequenceBuilder {
 	 * @param inchesLeft    How much the robot should strafe left in inches.
 	 */
 	public MovementSequenceBuilder forwardLeft(double inchesForward, double inchesLeft) {
+		// ignore this start velocity if previous end was ignored
+		boolean ignoreStartVelocity = !movements.isEmpty() && movements.getLast().ignoreEndVelocity;
+		// ignore this end velocity if linked to an ignored end velocity
+		boolean ignoreEndVelocity = ignoreStartVelocity && movements.getLast().linkedToNext;
+
 		movements.add(new Movement(Movement.MovementType.FORWARD_LEFT, inchesForward, inchesLeft, 0, 0, 0, 0));
+
+		if (ignoreStartVelocity)
+			setLastIgnoredStartVelocity();
+		if (ignoreEndVelocity) 
+			setLastIgnoredEndVelocity();
+
 		return this;
 	}
 
@@ -158,7 +225,18 @@ public class MovementSequenceBuilder {
 	 * @param inchesRight   How much the robot should strafe right in inches.
 	 */
 	public MovementSequenceBuilder forwardRight(double inchesForward, double inchesRight) {
+		// ignore this start velocity if previous end was ignored
+		boolean ignoreStartVelocity = !movements.isEmpty() && movements.getLast().ignoreEndVelocity;
+		// ignore this end velocity if linked to an ignored end velocity
+		boolean ignoreEndVelocity = ignoreStartVelocity && movements.getLast().linkedToNext;
+
 		movements.add(new Movement(Movement.MovementType.FORWARD_RIGHT, inchesForward, inchesRight, 0, 0, 0, 0));
+
+		if (ignoreStartVelocity)
+			setLastIgnoredStartVelocity();
+		if (ignoreEndVelocity) 
+			setLastIgnoredEndVelocity();
+
 		return this;
 	}
 
@@ -169,7 +247,18 @@ public class MovementSequenceBuilder {
 	 * @param inchesLeft     How much the robot should strafe left in inches.
 	 */
 	public MovementSequenceBuilder backwardLeft(double inchesBackward, double inchesLeft) {
+		// ignore this start velocity if previous end was ignored
+		boolean ignoreStartVelocity = !movements.isEmpty() && movements.getLast().ignoreEndVelocity;
+		// ignore this end velocity if linked to an ignored end velocity
+		boolean ignoreEndVelocity = ignoreStartVelocity && movements.getLast().linkedToNext;
+
 		movements.add(new Movement(Movement.MovementType.BACKWARD_LEFT, inchesBackward, inchesLeft, 0, 0, 0, 0));
+
+		if (ignoreStartVelocity)
+			setLastIgnoredStartVelocity();
+		if (ignoreEndVelocity) 
+			setLastIgnoredEndVelocity();
+
 		return this;
 	}
 
@@ -180,7 +269,18 @@ public class MovementSequenceBuilder {
 	 * @param inchesRight    How much the robot should strafe right in inches.
 	 */
 	public MovementSequenceBuilder backwardRight(double inchesBackward, double inchesRight) {
+		// ignore this start velocity if previous end was ignored
+		boolean ignoreStartVelocity = !movements.isEmpty() && movements.getLast().ignoreEndVelocity;
+		// ignore this end velocity if linked to an ignored end velocity
+		boolean ignoreEndVelocity = ignoreStartVelocity && movements.getLast().linkedToNext;
+
 		movements.add(new Movement(Movement.MovementType.BACKWARD_RIGHT, inchesBackward, inchesRight, 0, 0, 0, 0));
+
+		if (ignoreStartVelocity)
+			setLastIgnoredStartVelocity();
+		if (ignoreEndVelocity) 
+			setLastIgnoredEndVelocity();
+
 		return this;
 	}
 
@@ -274,7 +374,18 @@ public class MovementSequenceBuilder {
 	 * @param degrees The angle for the arm to be elevated in degrees.
 	 */
 	public MovementSequenceBuilder lowerArm(double degrees) {
+		// ignore this start velocity if previous end was ignored
+		boolean ignoreStartVelocity = !movements.isEmpty() && movements.getLast().ignoreEndVelocity;
+		// ignore this end velocity if linked to an ignored end velocity
+		boolean ignoreEndVelocity = ignoreStartVelocity && movements.getLast().linkedToNext;
+		
 		movements.add(new Movement(Movement.MovementType.LOWER_ARM, 0, 0, 0, degrees, 0, 0));
+
+		if (ignoreStartVelocity)
+			setLastIgnoredStartVelocity();
+		if (ignoreEndVelocity) 
+			setLastIgnoredEndVelocity();
+
 		return this;
 	}
 
@@ -284,7 +395,18 @@ public class MovementSequenceBuilder {
 	 * @param degrees The angle for the arm to be elevated in degrees.
 	 */
 	public MovementSequenceBuilder raiseArm(double degrees) {
+		// ignore this start velocity if previous end was ignored
+		boolean ignoreStartVelocity = !movements.isEmpty() && movements.getLast().ignoreEndVelocity;
+		// ignore this end velocity if linked to an ignored end velocity
+		boolean ignoreEndVelocity = ignoreStartVelocity && movements.getLast().linkedToNext;
+		
 		movements.add(new Movement(Movement.MovementType.RAISE_ARM, 0, 0, 0, degrees, 0, 0));
+
+		if (ignoreStartVelocity)
+			setLastIgnoredStartVelocity();
+		if (ignoreEndVelocity) 
+			setLastIgnoredEndVelocity();
+
 		return this;
 	}
 
@@ -302,8 +424,7 @@ public class MovementSequenceBuilder {
 	public MovementSequenceBuilder forward(double inches, boolean withPrevious) {
 		if (!movements.isEmpty() && withPrevious)
 			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.FORWARD, inches, 0, 0, 0, 0, 0));
-		return this;
+		return this.forward(inches);
 	}
 
 	/**
@@ -316,8 +437,7 @@ public class MovementSequenceBuilder {
 	public MovementSequenceBuilder backward(double inches, boolean withPrevious) {
 		if (!movements.isEmpty() && withPrevious)
 			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.BACKWARD, inches, 0, 0, 0, 0, 0));
-		return this;
+		return this.backward(inches);
 	}
 
 	/**
@@ -330,8 +450,7 @@ public class MovementSequenceBuilder {
 	public MovementSequenceBuilder left(double inches, boolean withPrevious) {
 		if (!movements.isEmpty() && withPrevious)
 			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.STRAFE_LEFT, 0, inches, 0, 0, 0, 0));
-		return this;
+		return this.left(inches);
 	}
 
 	/**
@@ -344,8 +463,7 @@ public class MovementSequenceBuilder {
 	public MovementSequenceBuilder right(double inches, boolean withPrevious) {
 		if (!movements.isEmpty() && withPrevious)
 			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.STRAFE_RIGHT, 0, inches, 0, 0, 0, 0));
-		return this;
+		return this.right(inches);
 	}
 
 	/**
@@ -358,8 +476,7 @@ public class MovementSequenceBuilder {
 	public MovementSequenceBuilder turnLeft(double degrees, boolean withPrevious) {
 		if (!movements.isEmpty() && withPrevious)
 			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.TURN_LEFT, 0, 0, degrees, 0, 0, 0));
-		return this;
+		return this.turnLeft(degrees);
 	}
 
 	/**
@@ -372,8 +489,7 @@ public class MovementSequenceBuilder {
 	public MovementSequenceBuilder turnRight(double degrees, boolean withPrevious) {
 		if (!movements.isEmpty() && withPrevious)
 			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.TURN_RIGHT, 0, 0, degrees, 0, 0, 0));
-		return this;
+		return this.turnRight(degrees);
 	}
 
 	/**
@@ -387,8 +503,7 @@ public class MovementSequenceBuilder {
 	public MovementSequenceBuilder forwardLeft(double inchesForward, double inchesLeft, boolean withPrevious) {
 		if (!movements.isEmpty() && withPrevious)
 			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.FORWARD_LEFT, inchesForward, inchesLeft, 0, 0, 0, 0));
-		return this;
+		return this.forwardLeft(inchesForward, inchesLeft);
 	}
 
 	/**
@@ -402,8 +517,7 @@ public class MovementSequenceBuilder {
 	public MovementSequenceBuilder forwardRight(double inchesForward, double inchesRight, boolean withPrevious) {
 		if (!movements.isEmpty() && withPrevious)
 			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.FORWARD_RIGHT, inchesForward, inchesRight, 0, 0, 0, 0));
-		return this;
+		return this.forwardRight(inchesForward, inchesRight);
 	}
 
 	/**
@@ -417,8 +531,7 @@ public class MovementSequenceBuilder {
 	public MovementSequenceBuilder backwardLeft(double inchesBackward, double inchesLeft, boolean withPrevious) {
 		if (!movements.isEmpty() && withPrevious)
 			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.BACKWARD_LEFT, inchesBackward, inchesLeft, 0, 0, 0, 0));
-		return this;
+		return this.backwardLeft(inchesBackward, inchesLeft);
 	}
 
 	/**
@@ -432,8 +545,7 @@ public class MovementSequenceBuilder {
 	public MovementSequenceBuilder backwardRight(double inchesBackward, double inchesRight, boolean withPrevious) {
 		if (!movements.isEmpty() && withPrevious)
 			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.BACKWARD_RIGHT, inchesBackward, inchesRight, 0, 0, 0, 0));
-		return this;
+		return this.backwardRight(inchesBackward, inchesRight);
 	}
 
 	/**
@@ -446,8 +558,7 @@ public class MovementSequenceBuilder {
 	public MovementSequenceBuilder lowerArm(double degrees, boolean withPrevious) {
 		if (!movements.isEmpty() && withPrevious)
 			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.LOWER_ARM, 0, 0, 0, degrees, 0, 0));
-		return this;
+		return this.lowerArm(degrees);
 	}
 
 	/**
@@ -460,8 +571,7 @@ public class MovementSequenceBuilder {
 	public MovementSequenceBuilder raiseArm(double degrees, boolean withPrevious) {
 		if (!movements.isEmpty() && withPrevious)
 			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.RAISE_ARM, 0, 0, 0, degrees, 0, 0));
-		return this;
+		return this.raiseArm(degrees);
 	}
 
 	//////////////////////////////////////////////
@@ -478,12 +588,10 @@ public class MovementSequenceBuilder {
 	 *                       drive movement has been completed.
 	 */
 	public MovementSequenceBuilder forward(double inches, boolean withPrevious, boolean ignoreVelocity) {
-		if (!movements.isEmpty() && withPrevious)
-			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.FORWARD, inches, 0, 0, 0, 0, 0));
+		this.forward(inches, withPrevious);
 
 		if (ignoreVelocity)
-			ignoreLastMovementVelocity();
+			setLastIgnoredEndVelocity();
 
 		return this;
 	}
@@ -498,12 +606,10 @@ public class MovementSequenceBuilder {
 	 *                       drive movement has been completed.
 	 */
 	public MovementSequenceBuilder backward(double inches, boolean withPrevious, boolean ignoreVelocity) {
-		if (!movements.isEmpty() && withPrevious)
-			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.BACKWARD, inches, 0, 0, 0, 0, 0));
+		this.backward(inches, withPrevious);
 
 		if (ignoreVelocity)
-			ignoreLastMovementVelocity();
+			setLastIgnoredEndVelocity();
 
 		return this;
 	}
@@ -518,12 +624,10 @@ public class MovementSequenceBuilder {
 	 *                       drive movement has been completed.
 	 */
 	public MovementSequenceBuilder left(double inches, boolean withPrevious, boolean ignoreVelocity) {
-		if (!movements.isEmpty() && withPrevious)
-			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.STRAFE_LEFT, 0, inches, 0, 0, 0, 0));
+		this.left(inches, withPrevious);
 
 		if (ignoreVelocity)
-			ignoreLastMovementVelocity();
+			setLastIgnoredEndVelocity();
 
 		return this;
 	}
@@ -538,12 +642,10 @@ public class MovementSequenceBuilder {
 	 *                       drive movement has been completed.
 	 */
 	public MovementSequenceBuilder right(double inches, boolean withPrevious, boolean ignoreVelocity) {
-		if (!movements.isEmpty() && withPrevious)
-			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.STRAFE_RIGHT, 0, inches, 0, 0, 0, 0));
+		this.right(inches, withPrevious);
 
 		if (ignoreVelocity)
-			ignoreLastMovementVelocity();
+			setLastIgnoredEndVelocity();
 
 		return this;
 	}
@@ -560,12 +662,10 @@ public class MovementSequenceBuilder {
 	 */
 	public MovementSequenceBuilder forwardLeft(double inchesForward, double inchesLeft, boolean withPrevious,
 			boolean ignoreVelocity) {
-		if (!movements.isEmpty() && withPrevious)
-			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.FORWARD_LEFT, inchesForward, inchesLeft, 0, 0, 0, 0));
+		this.forwardLeft(inchesForward, inchesLeft, withPrevious);
 
 		if (ignoreVelocity)
-			ignoreLastMovementVelocity();
+			setLastIgnoredEndVelocity();
 
 		return this;
 	}
@@ -582,12 +682,10 @@ public class MovementSequenceBuilder {
 	 */
 	public MovementSequenceBuilder forwardRight(double inchesForward, double inchesRight, boolean withPrevious,
 			boolean ignoreVelocity) {
-		if (!movements.isEmpty() && withPrevious)
-			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.FORWARD_RIGHT, inchesForward, inchesRight, 0, 0, 0, 0));
+		this.forwardRight(inchesForward, inchesRight, withPrevious);
 
 		if (ignoreVelocity)
-			ignoreLastMovementVelocity();
+			setLastIgnoredEndVelocity();
 
 		return this;
 	}
@@ -604,12 +702,10 @@ public class MovementSequenceBuilder {
 	 */
 	public MovementSequenceBuilder backwardLeft(double inchesBackward, double inchesLeft, boolean withPrevious,
 			boolean ignoreVelocity) {
-		if (!movements.isEmpty() && withPrevious)
-			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.BACKWARD_LEFT, inchesBackward, inchesLeft, 0, 0, 0, 0));
+		this.backwardLeft(inchesBackward, inchesLeft, withPrevious);
 
 		if (ignoreVelocity)
-			ignoreLastMovementVelocity();
+			setLastIgnoredEndVelocity();
 
 		return this;
 	}
@@ -626,12 +722,10 @@ public class MovementSequenceBuilder {
 	 */
 	public MovementSequenceBuilder backwardRight(double inchesBackward, double inchesRight, boolean withPrevious,
 			boolean ignoreVelocity) {
-		if (!movements.isEmpty() && withPrevious)
-			linkLastMovement();
-		movements.add(new Movement(Movement.MovementType.BACKWARD_RIGHT, inchesBackward, inchesRight, 0, 0, 0, 0));
+		this.backwardRight(inchesBackward, inchesRight, withPrevious);
 
 		if (ignoreVelocity)
-			ignoreLastMovementVelocity();
+			setLastIgnoredEndVelocity();
 
 		return this;
 	}
