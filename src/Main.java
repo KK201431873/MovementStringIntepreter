@@ -120,7 +120,7 @@ public class Main {
 
 		MovementSequence seq = new MovementSequenceBuilder().append(s).build();
 
-		drive.followMovementSequence(seq, "testing ignoreVelocity");
+//		drive.followMovementSequence(seq, "testing ignoreVelocity");
 
 		MovementSequence[] seqs = MovementStringInterpreter.toMovementSequenceArray(s_arr);
 
@@ -139,7 +139,17 @@ public class Main {
 				.forward(10)
 				.build();
 
-		drive.followMovementSequence(test, "TEST");
+//		drive.followMovementSequence(test, "TEST");
+		
+		MovementSequence main = new MovementSequenceBuilder()
+                .backward(5, false, true)
+                .backwardLeft(5, 5, false, true)
+                .backward(5)
+                .lowerArm(10, true)
+                .backward(5)
+                .build();
+		
+		drive.followMovementSequence(main, "BLUE 2+2");
 
 	}
 
